@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import pkg from "whatsapp-web.js";
+import { Client, LocalAuth } from "whatsapp-web.js";
 import { commands, loadModules } from "./core/modules/_module.js";
 import {
   extractCommandFromText,
@@ -10,8 +10,6 @@ import { Logger } from "./core/session/logger.js";
 dotenv.config({
   path: "../../.env",
 });
-
-const { Client, LocalAuth } = pkg;
 
 const logger = Logger.child({
   module: "main",
