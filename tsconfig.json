@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "Node16",
-    "moduleResolution": "Node16",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "resolveJsonModule": true,
@@ -17,9 +17,12 @@
     "noImplicitAny": false,
     "noImplicitThis": false,
     "strictNullChecks": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
   },
   "include": [
     "src/**/*",
-  ]
+  ],
+  "buildOptions": {
+
+  }
 }

@@ -2,7 +2,6 @@
   "name": "fedait",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "scripts": {
     "build:watch": "tsc -w -p tsconfig.release.json",
     "build": "tsc -p tsconfig.release.json"
@@ -17,7 +16,6 @@
     "dotenv": "^16.3.1",
     "fluent-ffmpeg": "^2.1.2",
     "mime-types": "^2.1.35",
-    "node-fetch": "^3.3.1",
     "pino": "^8.14.1",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.21.0"
