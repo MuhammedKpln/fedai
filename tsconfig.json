@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src/**/*",
+  ]
+}
