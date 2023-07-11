@@ -1,5 +1,8 @@
 import * as dotenv from "dotenv";
-import { Client, LocalAuth } from "whatsapp-web.js";
+import mongoose from "mongoose";
+import qrcode from "qrcode-terminal";
+import { Client, LocalAuth, RemoteAuth } from "whatsapp-web.js";
+import { MongoStore } from "wwebjs-mongo";
 import { commands, loadModules } from "./core/modules/_module.js";
 import {
   extractCommandFromText,
@@ -15,13 +18,24 @@ const logger = Logger.child({
   module: "main",
 });
 
+let puppetterArgs = ["--no-sandbox"];
+let authStrategy = new LocalAuth({
+  clientId: "fedai",
+});
+
 const client = new Client({
   puppeteer: {
     headless: true,
-    args: ["--no-sandbox", "--disable-gpu"],
+    args: puppetterArgs,
     executablePath: process.env.CHROME_BIN || undefined,
   },
-  authStrategy: new LocalAuth({ clientId: "fedai" }),
+  authStrategy: authStrategy,
+});
+
+client.on("qr", (qr) => {
+  console.log(qr);
+  console.log(`Scan this QR Code and copy the JSON\n`);
+  qrcode.generate(qr);
 });
 
 client.on("auth_failure", (error) => logger.error(error));
@@ -79,5 +93,29 @@ async function initialize() {
   }, 300);
 }
 
-// initialize();
-client.initialize();
+if (process.env.NODE_ENV === "production") {
+  logger.info("Init remote");
+  puppetterArgs = puppetterArgs.concat([
+    "--disable-gpu",
+    "--disable-setuid-sandbox",
+  ]);
+  mongoose.connect(process.env.MONGODB_URI!).then(() => {
+    logger.info("Connected to mongoose");
+    const store = new MongoStore({ mongoose: mongoose });
+    authStrategy = new RemoteAuth({
+      store: store,
+      backupSyncIntervalMs: 300000,
+    });
+
+    client
+      .initialize()
+      .then(() => console.log("ok"))
+      .catch((err) => logger.error(err));
+  });
+} else {
+  logger.info("Init local");
+  client
+    .initialize()
+    .then(() => console.log("ok"))
+    .catch((err) => logger.error(err));
+}

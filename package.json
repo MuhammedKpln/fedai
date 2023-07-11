@@ -16,9 +16,11 @@
     "dotenv": "^16.3.1",
     "fluent-ffmpeg": "^2.1.2",
     "mime-types": "^2.1.35",
+    "mongoose": "^7.3.2",
     "pino": "^8.14.1",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.21.0"
+    "whatsapp-web.js": "^1.21.0",
+    "wwebjs-mongo": "^1.1.0"
   },
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.21",
