@@ -5,6 +5,7 @@ import pkg from "whatsapp-web.js";
 import { MongoStore } from "wwebjs-mongo";
 import { commands, loadModules } from "./core/modules/_module.js";
 import {
+  commandRegexPattern,
   extractCommandFromText,
   extractCommandsFromModules,
 } from "./core/parser.js";
@@ -70,6 +71,23 @@ client.on("message", (message) => {
 });
 
 client.on("message_create", async (message) => {
+  // Remove commands and info messages.
+  if (
+    message.fromMe &&
+    (message.body.includes("*FEDAI*:") ||
+      message.body.match(commandRegexPattern))
+  ) {
+    let deleteAfterMs: number = 300;
+
+    if (message.body.includes("*FEDAI*:")) {
+      deleteAfterMs = 3000;
+    }
+
+    setTimeout(async () => {
+      await message.delete(true);
+    }, deleteAfterMs);
+  }
+
   if (!message.hasMedia && message.fromMe) {
     const command = extractCommandFromText(message.body);
     if (command) {
