@@ -1,7 +1,7 @@
 import { writeFile } from "fs/promises";
 import imagemin from "imagemin";
 import imageminWebp from "imagemin-webp";
-import pkg, { Client, Message } from "whatsapp-web.js";
+import pkg, { Message } from "whatsapp-web.js";
 import { errorMessage, infoMessage } from "../helpers.js";
 import { BasePlugin, addCommand } from "./_module.js";
 
@@ -11,10 +11,7 @@ const { MessageMedia } = pkg;
   isPublic: true,
 })
 export default class StickerPlugin implements BasePlugin {
-  async action(
-    message: Message,
-    client: Client
-  ): Promise<Promise<Promise<void>>> {
+  async action(message: Message): Promise<Promise<Promise<void>>> {
     if (!message.hasQuotedMsg) {
       await message.reply(errorMessage("Lütfen alintilayin"));
 
