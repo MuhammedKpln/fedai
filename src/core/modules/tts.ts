@@ -25,9 +25,18 @@ export default class TTSPlugin implements BasePlugin {
         "audio/mp4",
         Buffer.from(data).toString("base64")
       );
-      await client.sendMessage(message.to, messageMedia, {
-        sendAudioAsVoice: true,
-      });
+
+      if (message.hasQuotedMsg) {
+        const quotedMessage = await message.getQuotedMessage();
+
+        quotedMessage.reply(messageMedia, message.to, {
+          sendAudioAsVoice: true,
+        });
+      } else {
+        await client.sendMessage(message.to, messageMedia, {
+          sendAudioAsVoice: true,
+        });
+      }
 
       return;
     }
