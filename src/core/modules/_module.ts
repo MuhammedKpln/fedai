@@ -1,5 +1,5 @@
-import fs from "node:fs/promises";
-import path from "node:path";
+import { readdir } from "node:fs/promises";
+import * as path from "node:path";
 import { Client, Message } from "whatsapp-web.js";
 import { ICommand, ICommandOptions } from "../types/commads.js";
 
@@ -19,7 +19,7 @@ export function addCommand<T extends { new (...args: any[]): BasePlugin }>(
 }
 
 export async function loadModules() {
-  const dir = await fs.readdir("./core/modules");
+  const dir = await readdir("./core/modules");
 
   for (let plugin of dir) {
     const pluginExt = path.extname(plugin).toLowerCase();

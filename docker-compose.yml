@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  fedai:
+    build: .
+    command: node main.js
+    restart: always
+    env_file:
+      - .env
+    environment:
+      CHROME_BIN: /usr/bin/chromium-browser
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+    volumes:
+      - ./build/src/.wwebjs_auth/session/:/usr/app/fedai/build/src

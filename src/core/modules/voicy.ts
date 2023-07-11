@@ -1,5 +1,5 @@
 import axios from "axios";
-import ffmpeg from "fluent-ffmpeg";
+import * as ffmpeg from "fluent-ffmpeg";
 import { readFile, writeFile } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { Client, Message } from "whatsapp-web.js";

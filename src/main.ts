@@ -16,7 +16,11 @@ const logger = Logger.child({
 });
 
 const client = new Client({
-  puppeteer: { headless: true, args: ["--no-sandbox"] },
+  puppeteer: {
+    headless: true,
+    args: ["--no-sandbox", "--disable-gpu"],
+    executablePath: process.env.CHROME_BIN || undefined,
+  },
   authStrategy: new LocalAuth({ clientId: "fedai" }),
 });
 

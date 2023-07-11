@@ -1,41 +1,29 @@
-# syntax = docker/dockerfile:1
-
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.3.1
-FROM node:${NODE_VERSION}-slim as base
-
-LABEL fly_launch_runtime="NodeJS"
-
-# NodeJS app lives here
-WORKDIR /app
-
-# Set production environment
-ENV NODE_ENV=production
+FROM node:alpine
 
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential 
-
-# Install node modules
-COPY --link package.json package-lock.json .
-RUN npm install --production=false
-
-# Copy application code
-COPY --link . .
-
-# Remove development dependencies
-RUN npm prune --production
+RUN apk update
+RUN apk add git libwebp-tools ffmpeg-libs ffmpeg
 
 
-# Final stage for app image
-FROM base
+WORKDIR /usr/app/fedai
+RUN git clone https://github.com/MuhammedKpln/fedai /usr/app/fedai
 
-# Copy built application
-COPY --from=build /app /app
+RUN set -x \
+    && apk update \
+    && apk upgrade \
+    && apk add --no-cache \
+    udev \
+    ttf-freefont \
+    chromium \
+    && npm install puppeteer
 
-# Start the server by default, this can be overwritten at runtime
-CMD [ "npm", "run", "start" ]
+
+
+RUN npm install
+
+RUN npm run build
+
+WORKDIR /usr/app/fedai/build/src/
+
+
+CMD ["node", "main.js"]
