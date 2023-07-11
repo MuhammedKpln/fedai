@@ -18,6 +18,7 @@
     "noImplicitThis": false,
     "strictNullChecks": true,
     "experimentalDecorators": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*",
