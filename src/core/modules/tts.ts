@@ -1,6 +1,6 @@
 import axios from "axios";
 import pkg, { Client, Message } from "whatsapp-web.js";
-import { errorMessage, infoMessage } from "../helpers.js";
+import { errorMessage } from "../helpers.js";
 import { BasePlugin, addCommand } from "./_module.js";
 
 const { MessageMedia } = pkg;
@@ -14,6 +14,7 @@ export default class TTSPlugin implements BasePlugin {
         errorMessage("Hele bi yazi ver bana gardasim benim")
       );
     }
+
     const { data } = await axios.get(
       `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=tr&q=${text}`,
       { responseType: "arraybuffer" }
@@ -24,9 +25,8 @@ export default class TTSPlugin implements BasePlugin {
         "audio/mp4",
         Buffer.from(data).toString("base64")
       );
-      await message.reply(messageMedia, message.to, {
+      await client.sendMessage(message.to, messageMedia, {
         sendAudioAsVoice: true,
-        caption: infoMessage("Hele gardasim benim al"),
       });
 
       return;
