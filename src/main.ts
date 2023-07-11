@@ -60,7 +60,7 @@ client.on("message", (message) => {
         value.options?.isPublic
     );
 
-    if (isExists) {
+    if (isExists.length > 0) {
       const targetClass = new isExists[0].target();
 
       targetClass.action(message, client, command.args);
@@ -79,7 +79,7 @@ client.on("message_create", async (message) => {
           value.command.includes(command.command)
       );
 
-      if (isExists) {
+      if (isExists.length > 0) {
         const targetClass = new isExists[0].target();
 
         targetClass.action(message, client, command.args);
