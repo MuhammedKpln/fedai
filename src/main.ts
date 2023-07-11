@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
-import qrcode from "qrcode-terminal";
+import * as qrcode from "qrcode-terminal";
 import { Client, LocalAuth, RemoteAuth } from "whatsapp-web.js";
 import { MongoStore } from "wwebjs-mongo";
 import { commands, loadModules } from "./core/modules/_module.js";
@@ -35,7 +35,7 @@ const client = new Client({
 client.on("qr", (qr) => {
   console.log(qr);
   console.log(`Scan this QR Code and copy the JSON\n`);
-  qrcode.generate(qr);
+  qrcode.generate(qr, { small: true });
 });
 
 client.on("auth_failure", (error) => logger.error(error));
