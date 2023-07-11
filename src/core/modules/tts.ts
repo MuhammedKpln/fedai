@@ -5,7 +5,7 @@ import { BasePlugin, addCommand } from "./_module.js";
 
 const { MessageMedia } = pkg;
 
-@addCommand(".(tts).?(.*)")
+@addCommand(".(tts).?(.*)", { isPublic: true })
 export default class TTSPlugin implements BasePlugin {
   async action(message: Message, client: Client, text: string): Promise<void> {
     if (!text) {
