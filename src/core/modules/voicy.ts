@@ -3,7 +3,7 @@ import * as ffmpeg from "fluent-ffmpeg";
 import { readFile, writeFile } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { Client, Message } from "whatsapp-web.js";
-import { infoMessage, successfullMessage } from "../helpers.js";
+import { errorMessage, infoMessage, successfullMessage } from "../helpers.js";
 import { BasePlugin, addCommand } from "./_module.js";
 
 @addCommand(".voicy", {
@@ -16,7 +16,7 @@ export default class VoicyPlugin implements BasePlugin {
 
       if (se.hasMedia) {
         const media = await se.downloadMedia();
-        message.reply(infoMessage("Recognizing.."));
+        message.reply(infoMessage("Dinliyorum.."));
 
         await writeFile(
           "file.ogg",
@@ -32,6 +32,8 @@ export default class VoicyPlugin implements BasePlugin {
 
         message.reply(successfullMessage(recognizedText));
       }
+    } else {
+      message.reply(errorMessage("Lütfen bana bir ses alintilayin."));
     }
   }
 
