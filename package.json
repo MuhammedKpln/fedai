@@ -2,6 +2,8 @@
   "name": "fedait",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
+  "exports": "build/src/main.js",
   "scripts": {
     "build:watch": "tsc -w -p tsconfig.release.json",
     "build": "tsc -p tsconfig.release.json"
@@ -15,6 +17,8 @@
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "fluent-ffmpeg": "^2.1.2",
+    "imagemin": "^8.0.1",
+    "imagemin-webp": "^8.0.0",
     "mime-types": "^2.1.35",
     "mongoose": "^7.3.2",
     "pino": "^8.14.1",
@@ -24,6 +28,8 @@
   },
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.21",
+    "@types/imagemin": "^8.0.1",
+    "@types/imagemin-webp": "^7.0.0",
     "@types/node": "^20.4.1",
     "tslib": "^2.6.0",
     "typescript": "^5.1.6"

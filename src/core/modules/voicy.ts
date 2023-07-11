@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as ffmpeg from "fluent-ffmpeg";
+import ffmpeg from "fluent-ffmpeg";
 import { readFile, writeFile } from "node:fs/promises";
 import { Readable } from "node:stream";
 import { Client, Message } from "whatsapp-web.js";
@@ -16,7 +16,7 @@ export default class VoicyPlugin implements BasePlugin {
 
       if (se.hasMedia) {
         const media = await se.downloadMedia();
-        message.reply(infoMessage("Dinliyorum.."));
+        message.reply(infoMessage("Recognizing.."));
 
         await writeFile(
           "file.ogg",

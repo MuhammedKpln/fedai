@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
 import * as qrcode from "qrcode-terminal";
-import { Client, LocalAuth, RemoteAuth } from "whatsapp-web.js";
+import pkg from "whatsapp-web.js";
 import { MongoStore } from "wwebjs-mongo";
 import { commands, loadModules } from "./core/modules/_module.js";
 import {
@@ -9,6 +9,8 @@ import {
   extractCommandsFromModules,
 } from "./core/parser.js";
 import { Logger } from "./core/session/logger.js";
+
+const { Client, LocalAuth, RemoteAuth } = pkg;
 
 dotenv.config({
   path: "../../.env",
