@@ -24,6 +24,3 @@ RUN npm install
 RUN npm run build
 
 WORKDIR /usr/app/fedai/build/src/
-
-
-CMD ["node", "main.js"]

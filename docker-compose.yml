@@ -1,14 +1,18 @@
 version: "3.9"
 
 services:
+  mongo:
+    image: mongo
+    restart: always
   fedai:
     build: .
-    command: node main.js
     restart: always
+    command: node main.js
     env_file:
       - .env
     environment:
+      NODE_ENV: production
       CHROME_BIN: /usr/bin/chromium-browser
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-    volumes:
-      - ./build/src/.wwebjs_auth/session/:/usr/app/fedai/build/src
+    depends_on:
+      - mongo
