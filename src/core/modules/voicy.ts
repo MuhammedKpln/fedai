@@ -16,24 +16,39 @@ export default class VoicyPlugin implements BasePlugin {
 
       if (se.hasMedia) {
         const media = await se.downloadMedia();
-        message.reply(infoMessage("Recognizing.."));
+        if (!media.mimetype.startsWith("audio")) {
+          await message.reply(errorMessage("Lütfen bana bir ses alintilayin."));
+
+          return;
+        }
+        console.log(media);
+        let fileExtension;
+
+        if (media.mimetype.startsWith("audio/ogg")) {
+          fileExtension = "ogg";
+        }
+
+        if (media.mimetype.startsWith("audio/mpeg")) {
+          fileExtension = "mp3";
+        }
+
+        const fileName = `file.${fileExtension}`;
+
+        await message.reply(infoMessage("Recognizing.."));
 
         await writeFile(
-          "file.ogg",
-          Buffer.from(
-            media.data.replace("data:audio/ogg; codecs=opus;base64,", ""),
-            "base64"
-          )
+          fileName,
+          Buffer.from(media.data.replace(media.mimetype, ""), "base64")
         );
 
-        await this.convertToWav("./file.ogg");
+        await this.convertToWav(fileName, fileExtension);
 
         const recognizedText = await this.recognizeAudio();
 
         message.reply(successfullMessage(recognizedText));
       }
     } else {
-      message.reply(errorMessage("Lütfen bana bir ses alintilayin."));
+      await message.reply(errorMessage("Lütfen bana bir ses alintilayin."));
     }
   }
 
@@ -41,10 +56,10 @@ export default class VoicyPlugin implements BasePlugin {
     return "Changes speech to text";
   }
 
-  private convertToWav(file: string): Promise<void> {
+  private convertToWav(file: string, extension: string): Promise<void> {
     return new Promise((resolve) => {
       const convert = ffmpeg(file)
-        .inputFormat("ogg")
+        .inputFormat(extension)
         .audioCodec("pcm_s16le")
         .format("wav")
         .save("output.wav");
