@@ -7,6 +7,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME} 
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD} 
+    volumes:
+      - mongodata:/data/db
   fedai:
     build: .
     restart: always
@@ -19,3 +21,6 @@ services:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     depends_on:
       - mongo
+
+volumes:
+  mongodata:
