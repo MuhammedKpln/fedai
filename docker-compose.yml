@@ -1,26 +1,11 @@
 version: "3.9"
 
 services:
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME} 
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD} 
-    volumes:
-      - mongodata:/data/db
   fedai:
     build: .
-    restart: always
-    command: node main.js
-    env_file:
-      - .env
-    environment:
-      NODE_ENV: production
-      CHROME_BIN: /usr/bin/chromium-browser
-      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-    depends_on:
-      - mongo
-
-volumes:
-  mongodata:
+    volumes:
+      - ./:/root/fedai
+      - ./data:/root/fedai/build/src/auth
+      - /root/fedai/node_modules
+      - /root/fedai/build
+    restart: "always"

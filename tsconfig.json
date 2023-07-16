@@ -20,10 +20,6 @@
     "experimentalDecorators": true,
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*",
-  ],
-  "buildOptions": {
-
-  }
+  "include": ["src/**/*"],
+  "buildOptions": {}
 }

@@ -1,54 +1,41 @@
 import { writeFile } from "fs/promises";
-import imagemin from "imagemin";
-import imageminWebp from "imagemin-webp";
-import pkg, { Message } from "whatsapp-web.js";
+import sharp from "sharp";
 import { errorMessage, infoMessage } from "../helpers.js";
+import Message from "../proxy/message.js";
 import { BasePlugin, addCommand } from "./_module.js";
-
-const { MessageMedia } = pkg;
 
 @addCommand(".sticker", {
   isPublic: true,
 })
 export default class StickerPlugin implements BasePlugin {
-  async action(message: Message): Promise<Promise<Promise<void>>> {
-    if (!message.hasQuotedMsg) {
-      await message.reply(errorMessage("Lütfen alintilayin"));
+  async action(message: Message) {
+    if (!message?.reply_message) {
+      await message.edit(errorMessage("Lütfen alintilayin"));
 
       return;
     }
-    const quotedMessage = await message.getQuotedMessage();
 
-    if (!quotedMessage.hasMedia) {
-      await message.reply(errorMessage("Sadece resim alintialyin."));
+    if (!message.reply_message.mediaKey) {
+      await message.edit(errorMessage("Sadece resim alintialyin."));
       return;
     }
 
-    message.reply(infoMessage("Stickerci fedai calisiyor..."));
+    await message.edit(infoMessage("Stickerci fedai calisiyor..."));
 
-    const downloadedMedia = await quotedMessage.downloadMedia();
-    const mediaAsBuffer = Buffer.from(downloadedMedia.data, "base64");
-    await writeFile("image.jpeg", mediaAsBuffer);
-    const data = await this.convertToWebp();
+    const downloadedMedia = await message.reply_message.downloadMedia();
+    await writeFile("image.jpeg", downloadedMedia);
+    const data = await this.convertToWebp(downloadedMedia);
 
-    await message.reply(data, message.to, {
-      sendMediaAsSticker: true,
-    });
+    await message.sendMessage(
+      {
+        sticker: data,
+      },
+      message.jid
+    );
   }
 
-  private async convertToWebp(): Promise<pkg.MessageMedia> {
-    const result = await imagemin(["image.jpeg"], {
-      destination: "./output.webp",
-      //@ts-ignore
-      plugins: [imageminWebp({ quality: 80 })],
-    });
-
-    const messageMedia = new MessageMedia(
-      "image/webp",
-      result[0].data.toString("base64")
-    );
-
-    return messageMedia;
+  private async convertToWebp(chunks: Uint8Array): Promise<Buffer> {
+    return sharp(chunks).webp({ lossless: true }).toBuffer();
   }
 
   help(): string {

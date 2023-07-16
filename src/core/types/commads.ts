@@ -8,6 +8,8 @@ export interface ICommand {
 
 export interface ICommandOptions {
   isPublic?: boolean;
+  onlyGroups?: boolean;
+  excludeFromHelpList?: boolean;
 }
 
 export interface IExtractedCommand {

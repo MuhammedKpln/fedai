@@ -1,6 +1,7 @@
+import { WASocket } from "@whiskeysockets/baileys";
 import { readdir } from "node:fs/promises";
 import * as path from "node:path";
-import { Client, Message } from "whatsapp-web.js";
+import { BaseMessage } from "../proxy/base.js";
 import { ICommand, ICommandOptions } from "../types/commads.js";
 
 export const commands: ICommand[] = [];
@@ -30,6 +31,6 @@ export async function loadModules() {
 }
 
 export interface BasePlugin {
-  action(message: Message, client: Client, args?: string): void;
+  action(message: BaseMessage, client: WASocket, args?: string): void;
   help(): string;
 }
