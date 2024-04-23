@@ -7,5 +7,4 @@ services:
       - ./:/root/fedai
       - ./data:/root/fedai/build/src/auth
       - /root/fedai/node_modules
-      - /root/fedai/build
-    restart: "always"
+      - /root/fedai/builds
