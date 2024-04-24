@@ -1,18 +1,16 @@
-# fly.toml app configuration file generated for fedai on 2023-07-11T00:24:52+02:00
+# fly.toml app configuration file generated for fedai on 2024-04-23T07:13:08Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "fedai"
-primary_region = "cdg"
+app = 'fedai'
+primary_region = 'arn'
 
-[env]
-  PORT = "8080"
+[build]
 
-[http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ["app"]
+[[vm]]
+  size = 'shared-cpu-1x'
+
+[mounts]
+  source="vol_4mn39z975gzzj81r"
+  destination="/build/src/auth"
