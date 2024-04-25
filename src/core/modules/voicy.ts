@@ -11,7 +11,7 @@ import { Root } from "../types/modules/voicy/voicy.types.js";
 import { BasePlugin, addCommand } from "./_module.js";
 
 @addCommand(".voicy", {
-  isPublic: true,
+  isPublic: false,
 })
 export default class VoicyPlugin implements BasePlugin {
   async action(message: Message, _client: WASocket) {
@@ -26,12 +26,12 @@ export default class VoicyPlugin implements BasePlugin {
 
             const bodyStream = createReadStream("output.ogg");
 
-            this.convertToWav(bodyStream).on("end", async () => {
+            this.convertToWav(bodyStream)?.on("end", async () => {
               try {
                 const recognizedText = await this.recognizeAudio();
 
                 await message.sendMessage({
-                  text: successfullMessage(`Sunu duydum:  *${recognizedText}*`),
+                  text: successfullMessage(`${recognizedText}`),
                 });
               } catch (error) {
                 await message.edit(errorMessage("Ne diyo la bu anlamadim"));
@@ -126,10 +126,14 @@ export default class VoicyPlugin implements BasePlugin {
   }
 
   private convertToWav = (filePath: Readable) => {
-    return ffmpeg(filePath)
-      .inputFormat("ogg")
-      .audioCodec("pcm_s16le")
-      .format("wav")
-      .save("output.wav");
+    try {
+      return ffmpeg(filePath)
+        .inputFormat("ogg")
+        .audioCodec("pcm_s16le")
+        .format("wav")
+        .save("output.wav");
+    } catch (error) {
+      Logger.error(error);
+    }
   };
 }

@@ -25,6 +25,7 @@ export default class TTSPlugin implements BasePlugin {
     if (response.status === 200) {
       await message.sendMessage({
         audio: Buffer.from(buffer),
+        mimetype: "audio/mpeg",
       });
 
       return;
