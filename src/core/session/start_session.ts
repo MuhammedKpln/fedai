@@ -1,17 +1,21 @@
 import { Boom } from "@hapi/boom";
-import pkg, {
+import makeWASocket, {
   DisconnectReason,
   WAMessageContent,
   WAMessageKey,
   fetchLatestBaileysVersion,
   makeCacheableSignalKeyStore,
   makeInMemoryStore,
-  useMultiFileAuthState,
+  proto,
+  useMultiFileAuthState
 } from "@whiskeysockets/baileys";
 import NodeCache from "node-cache";
+import path from "node:path";
 import { Logger } from "./logger.js";
 
-const { makeWASocket, proto } = pkg;
+const authRootFolder = path.resolve("..", "..", "auth")
+const storeMultiFilePath = path.resolve(authRootFolder,  "baileys_store_multi.json")
+const baileysAuthPath = path.resolve(authRootFolder, "baileys") 
 
 const logger = Logger.child({
   module: "connection",
@@ -24,16 +28,16 @@ const msgRetryCounterCache = new NodeCache();
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 const store = makeInMemoryStore({ logger });
-store.readFromFile("./auth/baileys_store_multi.json");
+store.readFromFile(storeMultiFilePath);
 // save every 10s
 setInterval(() => {
-  store?.writeToFile("./auth/baileys_store_multi.json");
+  store?.writeToFile(storeMultiFilePath);
 }, 10_000);
 
 // // start a connection
 
 const startSocket = async () => {
-  const { state, saveCreds } = await useMultiFileAuthState("./auth/baileys");
+  const { state, saveCreds } = await useMultiFileAuthState(baileysAuthPath);
   // fetch latest version of WA Web
   const { version, isLatest } = await fetchLatestBaileysVersion();
   logger.info(`using WA v${version.join(".")}, isLatest: ${isLatest}`);

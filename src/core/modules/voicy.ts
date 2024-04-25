@@ -19,7 +19,7 @@ export default class VoicyPlugin implements BasePlugin {
       if (message.reply_message) {
         if (message.reply_message.audio) {
           try {
-            await message.edit(infoMessage("Bakim ne diyor aq cocu"));
+            await message.edit(infoMessage("Dinliyorum..."));
             const chunks = await message.reply_message.downloadMedia();
 
             await writeFile("output.ogg", chunks);
@@ -31,12 +31,10 @@ export default class VoicyPlugin implements BasePlugin {
                 const recognizedText = await this.recognizeAudio();
 
                 await message.sendMessage({
-                  text: successfullMessage(
-                    `Bak agliyo bak:  ${recognizedText}`
-                  ),
+                  text: successfullMessage(`Sunu duydum:  *${recognizedText}*`),
                 });
               } catch (error) {
-                await message.edit(infoMessage("Anlamadim amk"));
+                await message.edit(errorMessage("Ne diyo la bu anlamadim"));
               } finally {
                 await this.cleanup();
               }

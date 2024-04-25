@@ -1,5 +1,5 @@
 import { WASocket } from "@whiskeysockets/baileys";
-import { errorMessage } from "../helpers.js";
+import { errorMessage, infoMessage } from "../helpers.js";
 import Message from "../proxy/message.js";
 import { BasePlugin, addCommand } from "./_module.js";
 
@@ -11,10 +11,11 @@ export default class TTSPlugin implements BasePlugin {
     text: string
   ): Promise<void> {
     if (!text) {
-      await message.edit(errorMessage("Hele bi yazi ver bana gardasim benim"));
+      await message.edit(errorMessage("Text is required."));
 
       return;
     }
+    await message.edit(infoMessage("Converting.."));
 
     const response = await fetch(
       `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=tr&q=${text}`

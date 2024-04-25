@@ -15,42 +15,6 @@ const logger = Logger.child({
 
 let client: WASocket;
 
-// client.on("message_create", async (message) => {
-//   // Remove commands and info messages.
-//   if (
-//     message.fromMe &&
-//     (message.body.includes("*FEDAI*:") ||
-//       message.body.match(commandRegexPattern))
-//   ) {
-//     let deleteAfterMs: number = 300;
-
-//     if (message.body.includes("*FEDAI*:")) {
-//       deleteAfterMs = 3000;
-//     }
-
-//     setTimeout(async () => {
-//       await message.delete(true);
-//     }, deleteAfterMs);
-//   }
-
-//   if (!message.hasMedia && message.fromMe) {
-//     const command = extractCommandFromText(message.body);
-//     if (command) {
-//       const isExists = commands.filter(
-//         (value) =>
-//           value.command === command.command ||
-//           value.command.includes(command.command)
-//       );
-
-//       if (isExists.length > 0) {
-//         const targetClass = new isExists[0].target();
-
-//         targetClass.action(message, client, command.args);
-//       }
-//     }
-//   }
-// });
-
 async function initialize() {
   client = await startSocket();
   await loadModules();

@@ -10,7 +10,6 @@ primary_region = 'arn'
 
 [[vm]]
   size = 'shared-cpu-1x'
-
 [mounts]
-  source="vol_4mn39z975gzzj81r"
-  destination="/build/src/auth"
+  source="storage_vol"
+  destination="/root/fedai/auth"

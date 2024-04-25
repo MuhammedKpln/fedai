@@ -2,11 +2,11 @@
   "name": "fedait",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "exports": "./build/src/main.js",
   "scripts": {
     "build:watch": "tsc -w -p tsconfig.release.json",
-    "build": "tsc -p tsconfig.release.json"
+    "build": "tsc -p tsconfig.release.json",
+    "start": "cd build/src/ && node main.js && cd ../.."
   },
   "engines": {
     "node": ">=16"
