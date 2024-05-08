@@ -44,9 +44,9 @@ export async function commandCatcher(
 ) {
   let message: string = "";
 
-  if (lastMessage.key.remoteJid) {
-    await client.sendPresenceUpdate("unavailable", lastMessage.key.remoteJid);
-  }
+  // if (lastMessage.key.remoteJid) {
+  await client.sendPresenceUpdate("unavailable");
+  // }
 
   // if (lastMessage.key.fromMe) {
   if (lastMessage.message?.conversation) {
