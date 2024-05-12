@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.6.0",
+    "@whiskeysockets/baileys": "^6.7.2",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "fluent-ffmpeg": "^2.1.2",
