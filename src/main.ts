@@ -21,7 +21,12 @@ async function initialize() {
   setTimeout(() => {
     extractCommandsFromModules();
   }, 300);
+
   client.ev.process(async (event) => {
+    if (event["connection.update"]?.connection === "open") {
+      await client.sendPresenceUpdate("unavailable");
+    }
+
     const MESSAGE_UPSERT = event["messages.upsert"];
 
     if (MESSAGE_UPSERT) {
