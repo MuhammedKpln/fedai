@@ -7,15 +7,19 @@ import makeWASocket, {
   makeCacheableSignalKeyStore,
   makeInMemoryStore,
   proto,
-  useMultiFileAuthState
+  useMultiFileAuthState,
 } from "@whiskeysockets/baileys";
 import NodeCache from "node-cache";
+import fs from "node:fs/promises";
 import path from "node:path";
 import { Logger } from "./logger.js";
 
-const authRootFolder = path.resolve("..", "..", "auth")
-const storeMultiFilePath = path.resolve(authRootFolder,  "baileys_store_multi.json")
-const baileysAuthPath = path.resolve(authRootFolder, "baileys") 
+const authRootFolder = path.resolve("..", "..", "auth");
+const storeMultiFilePath = path.resolve(
+  authRootFolder,
+  "baileys_store_multi.json"
+);
+const baileysAuthPath = path.resolve(authRootFolder, "baileys");
 
 const logger = Logger.child({
   module: "connection",
@@ -51,7 +55,7 @@ const startSocket = async () => {
       keys: makeCacheableSignalKeyStore(state.keys, logger),
     },
     msgRetryCounterCache,
-    generateHighQualityLinkPreview: true,
+    generateHighQualityLinkPreview: false,
     getMessage,
   });
 
@@ -65,11 +69,14 @@ const startSocket = async () => {
     const { connection, lastDisconnect } = conn;
     if (connection === "close") {
       // reconnect if not logged out
-      if (
-        (lastDisconnect?.error as Boom)?.output?.statusCode !==
-        DisconnectReason.loggedOut
-      ) {
-        startSocket();
+      const errorStatusCode = (lastDisconnect?.error as Boom)?.output
+        ?.statusCode;
+      if (errorStatusCode !== DisconnectReason.loggedOut) {
+        await startSocket();
+      } else if (errorStatusCode === DisconnectReason.loggedOut) {
+        logger.info("Logged out, Removing auth folder.");
+        await fs.rmdir(authRootFolder, { recursive: true });
+        await startSocket();
       } else {
         console.log("Connection closed. You are logged out.");
       }
